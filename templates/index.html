@@ -1,0 +1,48 @@
+<html lang="ja">
+    <head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="static/test.css">
+        <title>maru65536_family</title>
+    </head>
+    <body>
+	<div class="main">
+        <div class="tableContainer">
+            使用済みID {{ ID_count }}垢 {{ user_count }}人<br>
+            <table class="table",border="1",align="center">
+                <tbody>
+                    <tr><th>ID</th><th>rate</th></tr>
+                    {% for ID,rating,is_using,is_hidden,atcoder_id in data %}
+		    {% if is_using and show %}
+		    <tr><td><a href="https://twitter.com/{{ ID[1:] }}">{{ ID }}</a></td><td><a href="https://atcoder.jp/users/{{ atcoder_id }}">{{ rating }}</a></td></tr>
+                    {% elif is_using and (not is_hidden or show) %}
+                    <tr><td><a href="https://twitter.com/{{ ID[1:] }}">{{ ID }}</a></td><td>{{ rating }}</td></tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="tableContainer">
+            未使用ID<br>
+            <table class="table",border="1",align="center">
+                <tbody>
+                    {% for ID,rating,is_using,is_hidden,atcoder_id in data %}
+                    {% if not is_using and (not is_hidden or show) %}
+                    <tr><td>{{ ID }}</td></tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="youbo">
+        <form action="/youbo" method="post">
+            <h4 for="youbo">要望</h4>
+                <textarea class="form-control" name="youbo" rows="4" cols="40"></textarea>
+                <div class="mt-2">
+		    <input class="btn btn-primary" type="submit" value="送信">
+                    <input class="btn btn-secondary" type="reset" value="リセット">
+                </div>
+            </form>
+        </div> 
+    </body>
+</html>

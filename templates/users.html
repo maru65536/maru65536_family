@@ -1,0 +1,20 @@
+<html lang="ja">
+    <head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="../static/test.css">
+        <title>maru65536_family</title>
+    </head>
+    <body>
+	<div class="main">
+	    {% if not hidden %}
+	    Hello, {{ ID }}!<br>
+	    Your rating is {{ rating }}.<br>
+	    偏差値は{{ hensati }}です<br>
+	    {% else %}
+	    ひみつ!<br>
+	    {% endif %}
+	    <br><br><br>
+	    <a href="https://marufamily.tk/">戻る</a>
+	</div>
+    </body>
+</html>
