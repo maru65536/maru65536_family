@@ -34,10 +34,12 @@ def i_u_count():
     return ID_count,user_count
 
 def hensati(score):
-    sql="select main_id,rating from family where is_using=1"
+    sql="select main_id,rating,is_using from family where is_using=1"
     cursor.execute(sql)
     d={}
-    for main_id,rating in cursor.fetchall():
+    for main_id,rating,is_using in cursor.fetchall():
+        if not is_using:
+            continue
         if rating==-1:
             rating+=1
         d[main_id]=rating
@@ -67,13 +69,13 @@ def user_page(ID):
 @app.route('/youbo',methods=["POST"])
 def youbo():
     print(request.form["youbo"])
-    return 'ありがとうございました!後ろ向きに検討します<br><a href="https://marufamily.tk/">戻る</a>'
+    return 'ありがとうございました!後ろ向きに検討します<br><a href="http://marufamily.tk/">戻る</a>'
 
 @app.route('/<secret>')
 def debug(secret):
     if secret!=os.environ['DB_PASS']:
         return "カス"
-    ID_count,user_count=users()
+    ID_count,user_count=i_u_count()
     return render_template('index.html',data=user_infomation(),ID_count=ID_count,user_count=user_count,show=True)
 
 @app.route('/favicon.ico')
