@@ -26,37 +26,29 @@
     </nav>
     <div class="main">
         <div class="tableContainer">
-            使用済みID {{ ID_count }}垢 {{ user_count }}人<br>
+            {{ ID_count }}垢 {{ user_count }}人<br>
             <table class="table" ,border="1" ,align="center">
                 <tbody>
                     <tr>
                         <th>ID</th>
-                        <th>rate</th>
+                        <th>rating</th>
+			<th>comment</th>
+			<th>birthday</th>
                     </tr>
-                    {% for ID,rating,is_using,is_hidden,atcoder_id in data %}
+                    {% for ID,rating,is_using,is_hidden,atcoder_id,comment,birthday in data %}
                     {% if is_using and show %}
                     <tr>
                         <td><a href="https://twitter.com/{{ ID[1:] }}">{{ ID }}</a></td>
                         <td><a href="https://atcoder.jp/users/{{ atcoder_id }}">{{ rating }}</a></td>
+			<td>{{ comment }}</td>
+			<td>{{ birthday }}</td>
                     </tr>
                     {% elif is_using and (not is_hidden or show) %}
                     <tr>
                         <td><a href="https://twitter.com/{{ ID[1:] }}">{{ ID }}</a></td>
                         <td>{{ rating }}</td>
-                    </tr>
-                    {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div class="tableContainer">
-            未使用ID<br>
-            <table class="table" ,border="1" ,align="center">
-                <tbody>
-                    {% for ID,rating,is_using,is_hidden,atcoder_id in data %}
-                    {% if not is_using and (not is_hidden or show) %}
-                    <tr>
-                        <td>{{ ID }}</td>
+			<td>{{ comment }}</td>
+			<td>{{ birthday }}</td>
                     </tr>
                     {% endif %}
                     {% endfor %}

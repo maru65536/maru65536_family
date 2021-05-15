@@ -14,14 +14,18 @@ connection = MySQLdb.connect(
 cursor = connection.cursor()
 
 def user_infomation():
-    sql="select id,rating,is_using,is_hidden,atcoder_id,rate_hidden from family"
+    sql="select id,rating,is_using,is_hidden,atcoder_id,rate_hidden,comment,birthday from family"
     cursor.execute(sql)
     tmp=list(cursor.fetchall())
     for i in range(len(tmp)):
         tmp[i]=list(tmp[i])
+        if tmp[i][7]!=None:
+            tmp[i][7]='{}/{}'.format(int(tmp[i][7][:2]),int(tmp[i][7][2:]))
+        else:
+            tmp[i][7]=''
         if tmp[i][5]:
             tmp[i][1]=-1
-        tmp[i].pop()
+        tmp[i].pop(5)
     tmp.sort(key=lambda x:-x[1])
     return tmp
 
@@ -53,6 +57,10 @@ def hensati(score):
 def index():
     ID_count,user_count=i_u_count()
     return render_template('index.html',data=user_infomation(),ID_count=ID_count,user_count=user_count,show=False)
+
+@app.route('/login')
+def user_page(ID):
+    return render_template('login.html')
 
 @app.route('/users/<ID>')
 def user_page(ID):
