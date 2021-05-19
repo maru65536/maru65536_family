@@ -59,7 +59,7 @@ def index():
     return render_template('index.html',data=user_infomation(),ID_count=ID_count,user_count=user_count,show=False)
 
 @app.route('/login')
-def login_page(ID):
+def login_page():
     return render_template('login.html')
 
 @app.route('/users/<ID>')
@@ -77,7 +77,7 @@ def user_page(ID):
 @app.route('/youbo',methods=["POST"])
 def youbo():
     print(request.form["youbo"])
-    return 'ありがとうございました!後ろ向きに検討します<br><a href="http://marufamily.tk/">戻る</a>'
+    return 'ありがとうございました!後ろ向きに検討します<br><a href="https://marufamily.tk/">戻る</a>'
 
 @app.route('/<secret>')
 def debug(secret):
@@ -94,13 +94,13 @@ def favcon():
 def css():
     return url_for('static',filename='test.css')
 
-@app.route("/.well-known/acme-challenge/GHBq1txa4FEQa4R5il7fZPzNfX4BmGh_moPxgqu_phU")
+@app.route("/.well-known/acme-challenge/oXoh_xzxlf1RBvOhDi8LKOmUZ421IXLEYb0XnFqFCCY")
 def acme_challenge():
-    return "GHBq1txa4FEQa4R5il7fZPzNfX4BmGh_moPxgqu_phU.Y-hG_7ZXJzsPTHH49htN8Grz-v9kSawKbjXhXFs48fU"
+    return "oXoh_xzxlf1RBvOhDi8LKOmUZ421IXLEYb0XnFqFCCY.Y-hG_7ZXJzsPTHH49htN8Grz-v9kSawKbjXhXFs48fU"
 
 if __name__=='__main__':
-    #import ssl
-    #ssl_context=ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    #ssl_context.load_cert_chain('fullchain.pem','privkey.pem')
-    app.run(host="0.0.0.0",port=80)#port=443,ssl_context=ssl_context
+    import ssl
+    ssl_context=ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    ssl_context.load_cert_chain('fullchain.pem','privkey.pem')
+    app.run(host="0.0.0.0",port=443,ssl_context=ssl_context)
 
