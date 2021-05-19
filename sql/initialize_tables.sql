@@ -1,7 +1,7 @@
-drop database if exists app_development;
-create database app_development;
+drop database if exists family_development;
+create database family_development;
 
-use app_development;
+use family_development;
 
 drop table if exists family;
 create table family (

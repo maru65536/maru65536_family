@@ -10,7 +10,7 @@ connection = MySQLdb.connect(
     host=os.environ['DB_HOST'],
     user=os.environ['DB_USER'],
     passwd=os.environ['DB_PASS'],
-    db='family')
+    db=os.environ['DB_NAME'] or 'family')
 cursor = connection.cursor()
 
 def user_infomation():
@@ -59,7 +59,7 @@ def index():
     return render_template('index.html',data=user_infomation(),ID_count=ID_count,user_count=user_count,show=False)
 
 @app.route('/login')
-def user_page(ID):
+def login_page(ID):
     return render_template('login.html')
 
 @app.route('/users/<ID>')

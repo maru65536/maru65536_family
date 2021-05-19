@@ -8,5 +8,22 @@ services:
     volumes:
       - db-data:/var/lib/mysql
       - ./sql:/sql
+  app:
+    build: .
+    command: bash -c "flask run --port=8081 --host=0.0.0.0"
+    working_dir: /maru65536_family
+    volumes:
+      - .:/maru65536_family
+    ports:
+      - 8081:8081
+    depends_on:
+      - db
+    stdin_open: true
+    tty: true
+    environment: 
+      DB_HOST: db
+      DB_USER: root
+      DB_PASS: password
+      DB_NAME: family_development
 volumes:
   db-data:
