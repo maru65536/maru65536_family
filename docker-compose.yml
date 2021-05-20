@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0.25
+    environment: 
+      MYSQL_ROOT_PASSWORD: password
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./sql:/sql
+  app:
+    build: .
+    command: bash -c "flask run --port=8081 --host=0.0.0.0"
+    working_dir: /maru65536_family
+    volumes:
+      - .:/maru65536_family
+    ports:
+      - 8081:8081
+    depends_on:
+      - db
+    stdin_open: true
+    tty: true
+    environment: 
+      DB_HOST: db
+      DB_USER: root
+      DB_PASS: password
+      DB_NAME: family_development
+volumes:
+  db-data:
