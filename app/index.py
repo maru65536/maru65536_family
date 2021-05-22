@@ -62,17 +62,22 @@ def index():
 def login_page():
     return render_template('login.html')
 
-@app.route('/users/<ID>')
-def user_page(ID):
-    tmp="@"+ID
-    sql="select rating,is_hidden from family where id='{}'".format(tmp)
-    cursor.execute(sql)
-    try:
-        rating,hidden=list(cursor.fetchall())[0]
-    except:
-        return "404だよ(ごめんね)"
-    SS=str(hensati(rating))[:4]
-    return render_template('users.html',ID=ID,rating=rating,hidden=hidden,hensati=SS)
+@app.route('/users/<id_>')
+def user_page(id_):
+    import re
+    id_match = re.fullmatch(r'@?(\w{1,15})', id_)
+    if id_match is None:
+        if '\'' in id_ or '#' in id_ or ';' in id_:
+            return '400 Bad Request(SQLインジェクションはできないよ)', 400
+        return '400 Bad Request', 400
+    id_str = f'@{id_match.group(1)}'
+    cursor.execute("SELECT `rating`, `is_hidden` FROM `family` where `id`=%s", (id_str,))
+    data = cursor.fetchone()
+    if data is None:
+        return '404だよ(ごめんね)', 404
+    rating, hidden = data
+    ss = str(hensati(rating))[:4]
+    return render_template('users.html', ID=id_, rating=rating, hidden=hidden, hensati=ss)
 
 @app.route('/youbo',methods=["POST"])
 def youbo():
