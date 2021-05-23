@@ -82,7 +82,7 @@ def user_page(id_):
 @app.route('/youbo',methods=["POST"])
 def youbo():
     print(request.form["youbo"])
-    return 'ありがとうございました!後ろ向きに検討します<br><a href="https://marufamily.tk/">戻る</a>'
+    return 'ありがとうございました!後ろ向きに検討します<br><a href="/">戻る</a>'
 
 @app.route('/<secret>')
 def debug(secret):
@@ -108,4 +108,3 @@ if __name__=='__main__':
     ssl_context=ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
     ssl_context.load_cert_chain('fullchain.pem','privkey.pem')
     app.run(host="0.0.0.0",port=443,ssl_context=ssl_context)
-
