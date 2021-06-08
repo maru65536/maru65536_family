@@ -30,12 +30,10 @@ def user_infomation():
     return tmp
 
 def i_u_count():
-    sql="select main_id from family where is_using=1"
-    cursor.execute(sql)
-    tmp=cursor.fetchall()
-    ID_count=len(tmp)
-    user_count=len(set(tmp))
-    return ID_count,user_count
+    cursor.execute("SELECT count(1), count(distinct main_id) FROM family WHERE is_using = 1")
+    result = cursor.fetchone()
+    
+    return result[0], result[1]
 
 def hensati(score):
     sql="select main_id,rating,is_using from family where is_using=1"
