@@ -81,7 +81,14 @@ def user_page(id_):
 
 @app.route('/youbo',methods=["POST"])
 def youbo():
-    print(request.form["youbo"])
+    content = request.form["youbo"]
+    print(content)
+    
+    cursor.execute(
+        "INSERT INTO youbo (IP, content, created_at) VALUES (%s, %s, NOW())",
+        (request.remote_addr, content)
+    )
+    connection.commit()
     return 'ありがとうございました!後ろ向きに検討します<br><a href="/">戻る</a>'
 
 @app.route('/<secret>')
