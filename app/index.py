@@ -91,6 +91,13 @@ def user_page(id_):
     ss = str(hensati(rating))[:4]
     return render_template('users.html', ID=id_, rating=rating, hidden=hidden, hensati=ss)
 
+
+@app.route("/user/<id_>/edit", methos=["GET"])
+@login_required
+def edit_user_page(id_):
+    return "もうちょっとまってね"
+
+
 @app.route('/youbo',methods=["POST"])
 def youbo():
     content = request.form["youbo"]
