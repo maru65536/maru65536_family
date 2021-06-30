@@ -20,10 +20,12 @@ services:
       - db
     stdin_open: true
     tty: true
-    environment: 
+    environment:
       DB_HOST: db
       DB_USER: root
       DB_PASS: password
       DB_NAME: family_development
+      SECRET_KEY: secret_key
+    env_file: .env
 volumes:
   db-data:
