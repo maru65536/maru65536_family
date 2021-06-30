@@ -3,7 +3,7 @@ import MySQLdb
 from flask import Flask, url_for, render_template, request, redirect, flash
 from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 from flask_dance.consumer import oauth_authorized
-from flask_login import login_user, LoginManager
+from flask_login import LoginManager, login_user, logout_user, login_required
 from app.use_case.auth.find_login_user_usercase import FindLoginUserUseCase
 from app.use_case.family.find_family_use_case import FindFamilyUseCase
 
@@ -134,6 +134,14 @@ def redirect_to_next_url(blueprint, token):
     else:
         flash("ログインに失敗しました", "danger")
 
+    return redirect("/")
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    flash("ログアウトしました", "primary")
     return redirect("/")
 
 
