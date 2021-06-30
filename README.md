@@ -19,7 +19,7 @@ docker-compose exec db mysql -u root -p
 ファイルからSQLを実行します
 
 ```sql
-source /sql/initialize_tables.sql
+source /sql/000_initialize_tables.sql
 ```
 
 ### flaskのログを見る
