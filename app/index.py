@@ -1,10 +1,22 @@
-import json
 import os
-
 import MySQLdb
-from flask import Flask,url_for,render_template,request
+from flask import Flask, url_for, render_template, request, redirect, flash
+from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
+from flask_dance.consumer import oauth_authorized
+from flask_login import login_user, LoginManager
+from app.use_case.auth.find_login_user_usercase import FindLoginUserUseCase
+from app.use_case.family.find_family_use_case import FindFamilyUseCase
 
 app=Flask(__name__)
+app.secret_key = os.environ["SECRET_KEY"]
+blueprint = make_twitter_blueprint(
+    api_key=os.environ["TWITTER_API_KEY"],
+    api_secret=os.environ["TWITTER_API_SECRET"],
+)
+app.register_blueprint(blueprint, url_prefix="/login")
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 connection = MySQLdb.connect(
     host=os.environ['DB_HOST'],
@@ -12,6 +24,12 @@ connection = MySQLdb.connect(
     passwd=os.environ['DB_PASS'],
     db=os.environ['DB_NAME'] or 'family')
 cursor = connection.cursor()
+
+
+@login_manager.user_loader
+def user_loader(user_id):
+    return FindFamilyUseCase(connection).exec(user_id)
+
 
 def user_infomation():
     sql="select id,rating,is_using,is_hidden,atcoder_id,rate_hidden,comment,birthday from family"
@@ -55,10 +73,6 @@ def hensati(score):
 def index():
     ID_count,user_count=i_u_count()
     return render_template('index.html',data=user_infomation(),ID_count=ID_count,user_count=user_count,show=False)
-
-@app.route('/login')
-def login_page():
-    return render_template('login.html')
 
 @app.route('/users/<id_>')
 def user_page(id_):
@@ -107,6 +121,21 @@ def css():
 @app.route("/.well-known/acme-challenge/oXoh_xzxlf1RBvOhDi8LKOmUZ421IXLEYb0XnFqFCCY")
 def acme_challenge():
     return "oXoh_xzxlf1RBvOhDi8LKOmUZ421IXLEYb0XnFqFCCY.Y-hG_7ZXJzsPTHH49htN8Grz-v9kSawKbjXhXFs48fU"
+
+
+@oauth_authorized.connect
+def redirect_to_next_url(blueprint, token):
+    blueprint.token = token
+
+    family = FindLoginUserUseCase(connection).exec(int(token["user_id"]), token["screen_name"])
+    if family is not None:
+        login_user(family)
+        flash("ログインしました", "primary")
+    else:
+        flash("ログインに失敗しました", "danger")
+
+    return redirect("/")
+
 
 if __name__=='__main__':
     import ssl
